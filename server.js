@@ -30,6 +30,7 @@ app.get("/", (req, res) => {
   res.send(database.users);
 });
 
+//Sign in route
 app.post("/signin", (req, res) => {
   if (
     req.body.email === database.users[0].email &&
@@ -41,6 +42,7 @@ app.post("/signin", (req, res) => {
   }
 });
 
+//Register route
 app.post("/register", (req, res) => {
   const { email, name, password } = req.body;
   database.users.push({
@@ -54,14 +56,37 @@ app.post("/register", (req, res) => {
   res.json(database.users[database.users.length - 1]);
 });
 
+//profile route
+app.get("/profile/:id", (req, res) => {
+  const { id } = req.params;
+  let found = false;
+  database.users.forEach((user) => {
+    if (user.id === id) {
+      found === true;
+      return res.json(user);
+    }
+  });
+  if (!found) {
+    res.status(400).json("not found");
+  }
+});
+
+//image route
+app.post("/image", (req, res) => {
+  const { id } = req.params;
+  let found = false;
+  database.users.forEach((user) => {
+    if (user.id === id) {
+      found === true;
+      user.entries++;
+      return res.json(user.entries);
+    }
+  });
+  if (!found) {
+    res.status(400).json("not found");
+  }
+});
+
 app.listen(3000, () => {
   console.log("App is running");
 });
-/*
-/---> res = this is working 
-/signin --> POST success/fail
-/register --> POST = user
-/profile/:userId --> GET = user
-/image --> PUT --> user
-
-*/
